@@ -1,0 +1,29 @@
+<div class="main-content">
+<p-table #dt [columns]="columns" [rows]="thePageSize" [value]="customerHistoryList" [totalRecords]="theTotalElements" selectionMode="multiple" responsiveLayout="scroll">
+  <ng-template pTemplate="caption">
+    <div class="d-flex align-items-center justify-content-between">
+      <h5 class="m-0"> CUSTOMER HISTORY REPORT</h5>
+      <button type="button" pButton pRipple icon="pi pi-file-o" (click)="dt.exportCSV()" class="p-mr-2" pTooltip="CSV" tooltipPosition="bottom"></button>
+    </div>
+  </ng-template>
+  <ng-template pTemplate="header" let-columns>
+    <tr>
+      <th *ngFor="let col of columns">
+        {{col.header}}
+      </th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-customerHistoryList>
+    <tr>
+      <td> {{ customerHistoryList.firstName }} </td>
+      <td>{{ customerHistoryList.lastName }}</td>
+      <td>{{ customerHistoryList.email }}</td>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="summary">
+    <div class="flex align-items-center justify-content-between">
+      In total there are {{ theTotalElements }} products.
+    </div>
+  </ng-template>
+</p-table>
+</div>

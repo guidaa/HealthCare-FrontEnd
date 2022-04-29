@@ -1,0 +1,30 @@
+<div class="main-content">
+  <p-table #dt [columns]="columns"  [rows]="thePageSize" [value]="orderHistoryList" [totalRecords]="theTotalElements" selectionMode="multiple" responsiveLayout="scroll">
+    <ng-template pTemplate="caption">
+      <div class="d-flex align-items-center justify-content-between">
+        <h5 class="m-0"> ORDER HISTORY REPORT</h5>
+        <button type="button" pButton pRipple icon="pi pi-file-o" (click)="dt.exportCSV()" class="p-mr-2" pTooltip="CSV" tooltipPosition="bottom"></button>
+      </div>
+    </ng-template>
+    <ng-template pTemplate="header" let-columns>
+      <tr>
+        <th *ngFor="let col of columns">
+          {{col.header}}
+        </th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body"  let-orderHistoryList>
+      <tr>
+        <td> {{ orderHistoryList.id }} </td>
+        <td> {{ orderHistoryList.totalPrice }} </td>
+        <td> {{ orderHistoryList.totalQuantity }} </td>
+        <td>{{ orderHistoryList.dateCreated | date:'medium' }}</td>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="summary">
+      <div class="flex align-items-center justify-content-between">
+        In total there are {{ theTotalElements }} products.
+      </div>
+    </ng-template>
+  </p-table>
+</div>

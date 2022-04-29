@@ -1,0 +1,96 @@
+<p-toast></p-toast>
+<div class="main-content">
+  <div class="card">
+    <p-toolbar styleClass="mb-4">
+      <ng-template pTemplate="left">
+        <button pButton pRipple label="New" icon="pi pi-plus" class="p-button-success mr-2"
+                (click)="openNew()" style="margin-right: 4px"></button>
+        <button type="button" pButton pRipple icon="pi pi-file" (click)="dt.exportCSV()" class="mr-2" pTooltip="CSV" tooltipPosition="bottom" style="margin-right: 4px"></button>
+      </ng-template>
+        <ng-template pTemplate="right">
+        <button pButton pRipple label="Customer Report" routerLink="/customer" class="p-button-help mr-2" icon="pi pi-user" style="margin-right: 4px"></button>
+        <button pButton pRipple label="Order Report" routerLink="/order" class="p-button-help mr-2" icon="pi pi-list" style="margin-right: 4px"></button>
+        </ng-template>
+    </p-toolbar>
+
+    <p-table #dt id='dt' [value]="products" [rows]="thePageSize" [columns]="columns" [totalRecords]="theTotalElements" [paginator]="true"
+             [globalFilterFields]="['name','country.name','representative.name','status']" responsiveLayout="scroll"
+             [rowHover]="true" dataKey="id" [responsive]="true" [autoLayout]="true"
+             currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+             [showCurrentPageReport]="true">
+      <ng-template pTemplate="caption">
+        <div class="flex align-items-center justify-content-between">
+          <h5 class="m-0">Manage Products</h5>
+        </div>
+      </ng-template>
+
+      <ng-template pTemplate="header" let-columns>
+        <tr>
+          <th scope="col" style="width: 34px"></th>
+          <th scope="col" *ngFor="let col of columns" [style]="col.style" pReorderableColumn>
+            {{ col.header }}
+          </th>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="body" let-product>
+        <tr>
+          <td>{{product.name}}</td>
+          <td><img [src]="product.imageUrl" [alt]="product.name" width="100" class="shadow-4"/></td>
+          <td>{{product.unitPrice | currency:'USD'}}</td>
+          <td>Medicine</td>
+          <td>{{product.unitsInStock}}</td>
+          <td>
+            <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success"
+                    (click)="editProduct(product)" style="margin-right: 4px"></button>
+            <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning"
+                    (click)="deleteProduct(product)"></button>
+          </td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="summary">
+        <div class="flex align-items-center justify-content-between">
+          In total there are {{ theTotalElements }} products.
+        </div>
+      </ng-template>
+    </p-table>
+  </div>
+
+  <p-dialog [(visible)]="productDialog" [style]="{width: '450px'}" header="Product Details" [modal]="true"
+            styleClass="p-fluid">
+    <ng-template pTemplate="content">
+      <form [formGroup]="formProduct" (ngSubmit)="submitForm()">
+        <div class="field">
+          <label for="name">Name</label>
+          <input type="text" pInputText id="name" required autofocus formControlName="name"/>
+          <small class="p-error" *ngIf="submitted && !product.name">Name is required.</small>
+        </div>
+        <div class="field">
+          <label for="description">Description</label>
+          <textarea id="description" pInputTextarea required rows="3" cols="20"
+                    formControlName="description"></textarea>
+        </div>
+
+        <div class="formgrid grid">
+          <div class="field col">
+            <label for="price">Unit Price</label>
+            <p-inputNumber id="price" mode="currency" currency="USD" locale="en-US"
+                           formControlName="unitPrice"></p-inputNumber>
+          </div>
+          <div class="field col">
+            <label for="quantity">Quantity</label>
+            <p-inputNumber id="quantity" formControlName="unitsInStock"></p-inputNumber>
+          </div>
+        </div>
+      </form>
+    </ng-template>
+
+    <ng-template pTemplate="footer">
+      <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text"
+              (click)="hideDialog()"></button>
+      <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text" [disabled]="formProduct.invalid" (click)="submitForm()"></button>
+    </ng-template>
+  </p-dialog>
+
+  <p-confirmDialog [style]="{width: '450px'}"></p-confirmDialog>
+</div>
